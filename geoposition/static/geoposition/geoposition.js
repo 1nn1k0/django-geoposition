@@ -20,7 +20,7 @@ if (jQuery != undefined) {
                 $longitudeField = $container.find('input.geoposition:eq(1)'),
                 latitude = parseFloat($latitudeField.val()) || $container.data('lat'),
                 longitude = parseFloat($longitudeField.val()) || $container.data('long'),
-                zoom = $container.data('zoom'),
+                zoom = parseFloat($('#id_zoom').val()) || $container.data('zoom'),
                 map,
                 mapLatLng,
                 mapOptions,
@@ -78,7 +78,11 @@ if (jQuery != undefined) {
                 'zoom': latitude && longitude ? zoom : 1
             });
             map = new google.maps.Map($mapContainer.get(0), mapOptions);
-			window.geopositionMap = map;
+            window.geopositionMap = map;
+            $('#id_zoom').val(map.getZoom());
+            google.maps.event.addListener(map, 'zoom_changed', function() {
+                $('#id_zoom').val(map.getZoom());
+            });
             marker = new google.maps.Marker({
                 'position': mapLatLng,
                 'map': map,
